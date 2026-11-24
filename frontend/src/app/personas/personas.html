@@ -1,0 +1,357 @@
+<div class="pf-screen">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       NAVBAR CORPORATIVO — fijo en la parte superior
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <nav class="pf-navbar">
+    <!-- Izquierda: Logo + Saludo -->
+    <div class="pf-navbar-left">
+      <div class="pf-nav-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="#F97316" stroke-width="2" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0
+               4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15
+               19.128v-.003c0-1.113-.285-2.16-.786-3.07M15
+               19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331
+               0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1
+               11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0
+               1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1
+               5.25 0Z"/>
+        </svg>
+      </div>
+      <div class="pf-nav-brand">
+        <span class="pf-nav-app">Sistema de Apoyo Social</span>
+        <span class="pf-nav-greeting">
+          Hola, un gusto en verte
+          <strong>{{ saludoNombre }}</strong>
+          <span class="pf-nav-badge" [class.pf-badge-admin]="esAdmin">
+            {{ usuarioRol }}
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Derecha: Acciones de sesión -->
+    <div class="pf-navbar-right">
+      <!-- Cerrar sesión -->
+      <button class="pf-nav-btn pf-nav-btn--outline" (click)="cerrarSesion()" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Cerrar Sesión
+      </button>
+
+      <!-- Eliminar cuenta — solo visible para ADMIN -->
+      <button *ngIf="esAdmin"
+              class="pf-nav-btn pf-nav-btn--danger"
+              (click)="eliminarCuenta()"
+              type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+        Eliminar mi Cuenta
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       CABECERA DEL MÓDULO (debajo del navbar)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="pf-header">
+    <div class="pf-header-left">
+      <div class="pf-logo-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="#F97316" stroke-width="2" width="26" height="26">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1
+               1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375
+               6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374
+               21c-2.331 0-4.512-.645-6.374-1.766Z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="pf-title">Agregar Nueva Persona Beneficiaria</h1>
+        <p class="pf-subtitle">
+          Sistema Institucional de Apoyo Social · Registro de Beneficiarios
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       TARJETA PRINCIPAL DEL FORMULARIO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="pf-card">
+
+    <!-- Alertas globales -->
+    <div class="pf-alert pf-alert--success" *ngIf="mensajeExito">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6 9 17l-5-5"/>
+      </svg>
+      {{ mensajeExito }}
+    </div>
+    <div class="pf-alert pf-alert--error" *ngIf="mensajeError && !cargando">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      {{ mensajeError }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()" autocomplete="off" novalidate>
+
+      <!-- ══ FILA 1 — Datos Principales ════════════════════════════════════ -->
+      <div class="pf-section-label">
+        <span class="pf-section-num">1</span> Datos Principales
+      </div>
+      <div class="pf-grid pf-grid--7">
+
+        <div class="pf-field">
+  <label for="numero">Nº <span class="pf-calc-badge">AUTO</span></label>
+  <input id="numero" type="number" formControlName="numero" placeholder="Auto" class="pf-calc" readonly/>
+</div>
+        <div class="pf-field">
+          <label for="nombres">Nombres <span class="req">*</span></label>
+          <input id="nombres" type="text" formControlName="nombres"
+                 placeholder="Juan Carlos"
+                 [class.pf-invalid]="isInvalid('nombres')"/>
+          <div class="pf-error" *ngIf="isInvalid('nombres')">
+            <span *ngIf="form.get('nombres')?.errors?.['required']">Obligatorio.</span>
+            <span *ngIf="form.get('nombres')?.errors?.['minlength']">Mínimo 3 caracteres.</span>
+          </div>
+        </div>
+
+        <div class="pf-field">
+          <label for="apellidos">Apellidos <span class="req">*</span></label>
+          <input id="apellidos" type="text" formControlName="apellidos"
+                 placeholder="Pérez Gómez"
+                 [class.pf-invalid]="isInvalid('apellidos')"/>
+          <div class="pf-error" *ngIf="isInvalid('apellidos')">
+            <span *ngIf="form.get('apellidos')?.errors?.['required']">Obligatorio.</span>
+            <span *ngIf="form.get('apellidos')?.errors?.['minlength']">Mínimo 3 caracteres.</span>
+          </div>
+        </div>
+
+        <div class="pf-field">
+  <label for="codigo">Código <span class="pf-calc-badge">AUTO</span></label>
+  <input id="codigo" type="text" formControlName="codigo" placeholder="Auto" class="pf-calc" readonly/>
+</div>
+
+        <div class="pf-field">
+          <label for="sexo">Sexo</label>
+          <select id="sexo" formControlName="sexo">
+            <option value="">Seleccionar</option>
+            <option *ngFor="let s of sexos" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+
+        <div class="pf-field">
+          <label for="fecha_ingreso">Fecha de Ingreso</label>
+          <input id="fecha_ingreso" type="date" formControlName="fecha_ingreso"
+                 [class.pf-invalid]="isInvalid('fecha_ingreso')"/>
+          <div class="pf-error" *ngIf="isInvalid('fecha_ingreso')">No debe superar el año 2026.</div>
+        </div>
+
+        <div class="pf-field">
+          <label for="edad_al_ingresar">Edad al Ingresar</label>
+          <input id="edad_al_ingresar" type="number" formControlName="edad_al_ingresar"
+                 placeholder="0" min="0"/>
+        </div>
+
+      </div>
+
+      <!-- ══ FILA 2 — Nacimiento y Ubicación ═══════════════════════════════ -->
+      <div class="pf-section-label">
+        <span class="pf-section-num">2</span> Nacimiento y Ubicación
+      </div>
+      <div class="pf-grid pf-grid--7">
+
+        <div class="pf-field">
+          <label for="cedula">Cédula de Identidad</label>
+          <input id="cedula" type="text" formControlName="cedula" placeholder="0912345678"/>
+        </div>
+
+        <div class="pf-field">
+          <label for="fecha_nac">Fecha de Nacimiento</label>
+          <input id="fecha_nac" type="date" formControlName="fecha_nac"
+                 [class.pf-invalid]="isInvalid('fecha_nac')"/>
+          <div class="pf-error" *ngIf="isInvalid('fecha_nac')">No debe superar el año 2026.</div>
+        </div>
+
+        <div class="pf-field">
+          <label for="edad_actual_anios">
+            Edad Años
+            <span class="pf-calc-badge">AUTO</span>
+          </label>
+          <input id="edad_actual_anios" type="number" formControlName="edad_actual_anios"
+                 placeholder="—" class="pf-calc" readonly/>
+        </div>
+
+        <div class="pf-field">
+          <label for="edad_actual_meses">
+            Edad Meses
+            <span class="pf-calc-badge">AUTO</span>
+          </label>
+          <input id="edad_actual_meses" type="number" formControlName="edad_actual_meses"
+                 placeholder="—" class="pf-calc" readonly/>
+        </div>
+
+        <div class="pf-field">
+          <label for="edad_actual_dias">
+            Edad Días
+            <span class="pf-calc-badge">AUTO</span>
+          </label>
+          <input id="edad_actual_dias" type="number" formControlName="edad_actual_dias"
+                 placeholder="—" class="pf-calc" readonly/>
+        </div>
+
+        <div class="pf-field">
+          <label for="ciudad_origen">Ciudad de Origen</label>
+          <input id="ciudad_origen" type="text" formControlName="ciudad_origen"
+                 placeholder="Guayaquil"/>
+        </div>
+
+        <div class="pf-field">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" type="text" formControlName="direccion"
+                 placeholder="Calle, sector..."/>
+        </div>
+
+      </div>
+
+      <!-- ══ FILA 3 — Contacto y Gestión ═══════════════════════════════════ -->
+      <div class="pf-section-label">
+        <span class="pf-section-num">3</span> Contacto y Gestión
+      </div>
+      <div class="pf-grid pf-grid--7">
+
+        <div class="pf-field">
+          <label for="codigo_pais">Código País <span class="req">*</span></label>
+          <select id="codigo_pais" formControlName="codigo_pais"
+        [class.pf-invalid]="isInvalid('codigo_pais')">
+  <option *ngFor="let p of paises" [value]="p.prefijo">
+    {{ p.nombre }} ({{ p.codigo }}) {{ p.prefijo }}
+  </option>
+</select>
+          <div class="pf-error" *ngIf="isInvalid('codigo_pais')">Obligatorio.</div>
+        </div>
+
+        <div class="pf-field">
+          <label for="telefono_contacto">Teléfono de Contacto</label>
+          <input id="telefono_contacto" type="text" formControlName="telefono_contacto"
+                 placeholder="0999 999 999"/>
+        </div>
+
+        
+
+        <div class="pf-field">
+  <label for="representante">Representante</label>
+  <input id="representante"
+         type="text"
+         formControlName="representante"
+         placeholder="Nombre del representante"/>
+</div>
+
+<div class="pf-field">
+  <label for="derivado_por">Derivado Por</label>
+  <input id="derivado_por"
+         type="text"
+         formControlName="derivado_por"
+         placeholder="Persona o institución"/>
+</div>
+
+        <div class="pf-field">
+          <label for="modalidad">Modalidad</label>
+          <input id="modalidad" type="text" formControlName="modalidad"
+                 placeholder="Presencial / Virtual"/>
+        </div>
+
+        <div class="pf-field">
+          <label for="fecha_visita_domiciliaria">Fecha Visita Domiciliaria</label>
+          <input id="fecha_visita_domiciliaria" type="date"
+                 formControlName="fecha_visita_domiciliaria"
+                 [class.pf-invalid]="isInvalid('fecha_visita_domiciliaria')"/>
+          <div class="pf-error" *ngIf="isInvalid('fecha_visita_domiciliaria')">
+            No debe superar el año 2026.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══ FILA 4 — Problemática y Derivación ════════════════════════════ -->
+      <div class="pf-section-label">
+        <span class="pf-section-num">4</span> Problemática y Derivación
+      </div>
+      <div class="pf-grid pf-grid--2">
+
+        <div class="pf-field">
+          <label for="tipo_problematica">Tipo de Problemática</label>
+          <input id="tipo_problematica" type="text" formControlName="tipo_problematica"
+                 placeholder="Describa la problemática"/>
+        </div>
+
+        <div class="pf-field">
+          <label for="fecha_reinsercion_derivacion">Fecha Reinserción o Derivación</label>
+          <input id="fecha_reinsercion_derivacion" type="date"
+                 formControlName="fecha_reinsercion_derivacion"
+                 [class.pf-invalid]="isInvalid('fecha_reinsercion_derivacion')"/>
+          <div class="pf-error" *ngIf="isInvalid('fecha_reinsercion_derivacion')">
+            No debe superar el año 2026.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══ FILA 5 — Observaciones ═════════════════════════════════════════ -->
+      <div class="pf-section-label">
+        <span class="pf-section-num">5</span> Observaciones
+      </div>
+      <div class="pf-grid pf-grid--1">
+        <div class="pf-field">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" formControlName="observaciones" rows="4"
+                    placeholder="Ingrese las observaciones institucionales pertinentes..."></textarea>
+        </div>
+      </div>
+
+      <!-- ══ ACCIONES ═══════════════════════════════════════════════════════ -->
+      <div class="pf-actions">
+        <button type="submit" class="pf-btn-primary"
+                [disabled]="form.invalid || cargando">
+          <svg *ngIf="!cargando" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <svg *ngIf="cargando" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="spin">
+            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+          </svg>
+          <span>{{ cargando ? 'Guardando...' : 'Agregar Persona' }}</span>
+        </button>
+        <span class="pf-required-note">
+          <span class="req">*</span> Campos obligatorios
+        </span>
+      </div>
+
+    </form>
+  </div><!-- /pf-card -->
+
+</div><!-- /pf-screen -->

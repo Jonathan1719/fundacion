@@ -1,0 +1,436 @@
+/* ═══════════════════════════════════════════════════════════════
+   PERSONAS — Paleta Corporativa Naranja / Blanco
+   60 % → #FFFFFF / #F8FAFC
+   30 % → #1E293B
+   10 % → #F97316
+   ═══════════════════════════════════════════════════════════════ */
+
+:host {
+  --c-bg:        #F8FAFC;
+  --c-card:      #FFFFFF;
+  --c-text:      #1E293B;
+  --c-muted:     #64748B;
+  --c-border:    #E2E8F0;
+  --c-orange:    #F97316;
+  --c-orange-h:  #EA580C;
+  --c-orange-lt: #FFF7ED;
+  --c-red:       #EF4444;
+  --c-red-lt:    #FEF2F2;
+  --c-green:     #16A34A;
+  --c-green-lt:  #F0FDF4;
+  --c-calc:      #F1F5F9;
+  --r-sm:        6px;
+  --r-md:        10px;
+  --r-lg:        14px;
+  --shadow:      0 4px 24px rgba(30,41,59,.07);
+  --font:        'Inter', system-ui, -apple-system, sans-serif;
+  --nav-h:       64px;
+}
+
+/* ── Reset mínimo ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Layout raíz ──────────────────────────────────────────────── */
+.pf-screen {
+  min-height: 100vh;
+  background: var(--c-bg);
+  font-family: var(--font);
+  color: var(--c-text);
+  padding-bottom: 3rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVBAR CORPORATIVO
+   ═══════════════════════════════════════════════════════════════ */
+.pf-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  background: var(--c-card);
+  border-bottom: 2px solid var(--c-orange);
+  box-shadow: 0 2px 12px rgba(30,41,59,.06);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ─ Izquierda ─────────────────────────────────────────────────── */
+.pf-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+  min-width: 0;
+}
+
+.pf-nav-logo {
+  width: 42px;
+  height: 42px;
+  background: var(--c-orange-lt);
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pf-nav-brand {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pf-nav-app {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--c-orange);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.pf-nav-greeting {
+  font-size: .95rem;
+  color: var(--c-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+.pf-nav-greeting strong {
+  font-weight: 700;
+}
+
+/* Badge de rol */
+.pf-nav-badge {
+  font-size: .65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: var(--c-border);
+  color: var(--c-muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.pf-badge-admin {
+  background: var(--c-orange-lt);
+  color: var(--c-orange-h);
+}
+
+/* ─ Derecha — Botones de sesión ───────────────────────────────── */
+.pf-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-shrink: 0;
+}
+
+.pf-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem 1.1rem;
+  border-radius: var(--r-sm);
+  font-size: .83rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  border: none;
+  transition: background .18s, color .18s, box-shadow .18s, transform .1s;
+  white-space: nowrap;
+}
+
+.pf-nav-btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--c-orange);
+  color: var(--c-orange);
+}
+
+.pf-nav-btn--outline:hover {
+  background: var(--c-orange);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(249,115,22,.2);
+}
+
+.pf-nav-btn--danger {
+  background: #FEF2F2;
+  border: 1.5px solid #FECACA;
+  color: var(--c-red);
+}
+
+.pf-nav-btn--danger:hover {
+  background: var(--c-red);
+  border-color: var(--c-red);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(239,68,68,.22);
+}
+
+.pf-nav-btn:active { transform: scale(.97); }
+
+/* ═══════════════════════════════════════════════════════════════
+   CABECERA DEL MÓDULO
+   ═══════════════════════════════════════════════════════════════ */
+.pf-header {
+  background: var(--c-card);
+  border-bottom: 1px solid var(--c-border);
+  padding: 1.1rem 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.pf-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pf-logo-wrap {
+  width: 48px;
+  height: 48px;
+  background: var(--c-orange-lt);
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pf-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--c-text);
+  line-height: 1.2;
+}
+
+.pf-subtitle {
+  margin: 3px 0 0;
+  font-size: .75rem;
+  color: var(--c-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TARJETA PRINCIPAL
+   ═══════════════════════════════════════════════════════════════ */
+.pf-card {
+  max-width: 1380px;
+  margin: 1.75rem auto 0;
+  background: var(--c-card);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--shadow);
+  padding: 1.75rem 2.25rem 2.5rem;
+}
+
+/* ── Alertas ──────────────────────────────────────────────────── */
+.pf-alert {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .875rem 1.25rem;
+  border-radius: var(--r-md);
+  font-size: .875rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  animation: slideDown .25s ease;
+}
+
+.pf-alert--success { background: var(--c-green-lt); border: 1px solid #BBF7D0; color: var(--c-green); }
+.pf-alert--error   { background: var(--c-red-lt);   border: 1px solid #FCA5A5; color: var(--c-red);   }
+
+/* ── Etiquetas de sección ─────────────────────────────────────── */
+.pf-section-label {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--c-muted);
+  margin: 1.75rem 0 .85rem;
+}
+
+.pf-section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--c-orange);
+  color: #fff;
+  border-radius: 50%;
+  font-size: .68rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ── Grids ────────────────────────────────────────────────────── */
+.pf-grid { display: grid; gap: 1rem 1.25rem; }
+.pf-grid--7 { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.pf-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pf-grid--1 { grid-template-columns: 1fr; }
+
+@media (max-width: 1200px) { .pf-grid--7 { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 768px)  { .pf-grid--7, .pf-grid--2 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .pf-grid--7, .pf-grid--2 { grid-template-columns: 1fr; } }
+
+/* ── Campo ────────────────────────────────────────────────────── */
+.pf-field { display: flex; flex-direction: column; gap: 4px; }
+
+.pf-field label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--c-text);
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+
+.req { color: var(--c-red); }
+
+/* Badge AUTO para campos calculados */
+.pf-calc-badge {
+  font-size: .6rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #E0F2FE;
+  color: #0369A1;
+  letter-spacing: .03em;
+}
+
+/* ── Controles base ───────────────────────────────────────────── */
+.pf-field input,
+.pf-field select,
+.pf-field textarea {
+  width: 100%;
+  padding: .55rem .75rem;
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: var(--c-card);
+  color: var(--c-text);
+  font-size: .875rem;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.pf-field input::placeholder,
+.pf-field textarea::placeholder { color: #94A3B8; }
+
+.pf-field input:focus,
+.pf-field select:focus,
+.pf-field textarea:focus {
+  border-color: var(--c-orange);
+  box-shadow: 0 0 0 3px rgba(249,115,22,.14);
+}
+
+.pf-field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .75rem center;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+.pf-field textarea { resize: vertical; min-height: 90px; }
+
+/* Campo calculado (solo lectura) */
+.pf-field input.pf-calc {
+  background: var(--c-calc);
+  color: var(--c-muted);
+  cursor: not-allowed;
+}
+.pf-field input.pf-calc:focus { border-color: var(--c-border); box-shadow: none; }
+
+/* Estado inválido */
+.pf-field input.pf-invalid,
+.pf-field select.pf-invalid { border-color: var(--c-red); }
+.pf-field input.pf-invalid:focus,
+.pf-field select.pf-invalid:focus { box-shadow: 0 0 0 3px rgba(239,68,68,.13); }
+
+/* Mensajes de error */
+.pf-error {
+  font-size: .72rem;
+  color: var(--c-red);
+  font-weight: 500;
+  line-height: 1.35;
+  animation: fadeUp .2s ease;
+}
+
+/* ── Acciones ─────────────────────────────────────────────────── */
+.pf-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--c-border);
+}
+
+.pf-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .7rem 1.75rem;
+  background: var(--c-orange);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-size: .93rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background .18s, box-shadow .18s, transform .1s;
+  box-shadow: 0 3px 10px rgba(249,115,22,.22);
+}
+
+.pf-btn-primary:hover:not(:disabled) {
+  background: var(--c-orange-h);
+  box-shadow: 0 5px 16px rgba(249,115,22,.32);
+}
+
+.pf-btn-primary:active:not(:disabled) { transform: scale(.97); }
+
+.pf-btn-primary:disabled {
+  background: #FED7AA;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.pf-required-note { font-size: .75rem; color: var(--c-muted); }
+
+/* ── Animaciones ──────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spin { animation: spin .8s linear infinite; }
+
+/* ── Responsive navbar ────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .pf-navbar { padding: 0 1rem; }
+  .pf-nav-greeting { font-size: .82rem; }
+  .pf-card { padding: 1.25rem 1rem 2rem; }
+  .pf-header { padding: .875rem 1rem; }
+}

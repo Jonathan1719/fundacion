@@ -1,0 +1,554 @@
+<div class="db-screen">
+
+  <nav class="db-navbar">
+    <div class="db-nav-left">
+      <div class="db-nav-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="#F97316" stroke-width="2" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0
+               4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003
+               c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318
+               0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109
+               a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1
+               -6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625
+               0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>
+        </svg>
+      </div>
+      <div class="db-nav-brand">
+        <span class="db-nav-app">Gestión de datos e información de usuarios de Fundación Alas de Colibrí</span>
+        <span class="db-nav-greeting">
+          Hola, un gusto en verte
+          <strong>{{ saludoNombre }}</strong>
+          <span class="db-nav-badge" [class.db-badge-admin]="esAdmin">
+            {{ usuarioRol }}
+          </span>
+          <span *ngIf="adminMensaje" class="db-nav-admin-tag">· {{ adminMensaje }}</span>
+        </span>
+      </div>
+    </div>
+    <div class="db-nav-right">
+      <button class="db-nav-btn db-nav-btn--outline" (click)="cerrarSesion()" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <div class="db-header">
+    <div class="db-header-left">
+      <div class="db-logo-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="#F97316" stroke-width="2" width="26" height="26">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375
+               0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11
+               a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374
+               21c-2.331 0-4.512-.645-6.374-1.766Z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="db-title">Sistema de Personas — Apoyo Social</h1>
+        <p class="db-subtitle">Gestión institutional de beneficiarios · Panel de control</p>
+      </div>
+    </div>
+    <div class="db-header-actions">
+      <input id="excelInput" type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" hidden>
+      <button class="db-btn-sm db-btn-sm--outline" (click)="seleccionarExcel()" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Importar Excel
+      </button>
+      <button class="db-btn-sm db-btn-sm--outline" (click)="exportarExcel()" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Exportar Excel
+      </button>
+      <span *ngIf="archivoNombre" class="db-excel-name">{{ archivoNombre }}</span>
+    </div>
+  </div>
+
+  <div class="db-alerts" *ngIf="success || error">
+    <div class="db-alert db-alert--success" *ngIf="success">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6 9 17l-5-5"/>
+      </svg>
+      {{ success }}
+    </div>
+    <div class="db-alert db-alert--error" *ngIf="error">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      {{ error }}
+    </div>
+  </div>
+
+  <div class="db-card" *ngIf="puedeGestionarUsuarios && usuariosRegistrados.length > 0">
+    <div class="db-card-title">
+      <span class="db-section-num">🔐</span> Usuarios del Sistema
+    </div>
+    <div class="db-table-wrap">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Tiempo restante</th>
+            <th>Gestión</th> </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuariosRegistrados">
+            <td>{{ u.nombreCompleto || u.usuario || u.email }}</td>
+            <td>
+              <span class="db-badge" [class.db-badge-admin]="u.rol === 'ADMIN'" [class.db-badge-master]="u.rol === 'MASTER'">
+                {{ u.rol }}
+              </span>
+            </td>
+            <td>
+              <span class="db-estado-badge"
+                    [class.db-estado--activo]="u.estado === 'Activo'"
+                    [class.db-estado--suspendido]="u.estado === 'Suspendido'">
+                <span class="db-estado-dot"></span>
+                {{ u.estado || 'Activo' }}
+              </span>
+            </td>
+            <td>
+              <span *ngIf="u.estado === 'Suspendido'" class="db-tiempo-restante">
+                {{ tiempoRestante(u) }}
+              </span>
+              <span *ngIf="u.estado !== 'Suspendido'" class="db-tiempo-na">—</span>
+            </td>
+            <td class="db-acciones-cell">
+              <button
+                *ngIf="u.estado !== 'Suspendido'"
+                class="db-btn-warning-sm"
+                (click)="abrirModalSuspender(u)"
+                type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="10" y1="15" x2="10" y2="9"/>
+                  <line x1="14" y1="15" x2="14" y2="9"/>
+                </svg>
+                Suspender </button>
+              <button
+                *ngIf="u.estado === 'Suspendido'"
+                class="db-btn-success-sm"
+                (click)="reactivarUsuario(u)"
+                type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+                Reactivar </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="db-card" *ngIf="personas.length > 0">
+    <div class="db-card-header-row">
+      <div class="db-card-title">
+        <span class="db-section-num">📊</span>
+        Tabla de Personas Importadas
+        <span class="db-count-badge">{{ personas.length }}</span>
+      </div>
+      <div class="db-tabla-acciones">
+        <button
+          *ngIf="!mostrarTablaExcel"
+          class="db-btn-sm db-btn-sm--orange"
+          (click)="mostrarTabla()"
+          type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Mostrar tabla
+        </button>
+        <button
+          *ngIf="mostrarTablaExcel"
+          class="db-btn-sm db-btn-sm--muted"
+          (click)="ocultarTabla()"
+          type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+            <line x1="1" y1="1" x2="23" y2="23"/>
+          </svg>
+          Ocultar tabla
+        </button>
+      </div>
+    </div>
+
+    <div class="db-table-wrap" *ngIf="mostrarTablaExcel">
+      <table class="db-table db-table--personas">
+        <thead>
+          <tr>
+            <th>N°</th><th>Nombres</th><th>Apellidos</th><th>Cédula</th>
+            <th>Sexo</th><th>F. Ingreso</th><th>Edad Ing.</th>
+            <th>F. Nacimiento</th><th>Años</th><th>Meses</th><th>Días</th>
+            <th>Ciudad</th><th>Dirección</th><th>País</th><th>Teléfono</th>
+            <th>Representante</th><th>Derivado Por</th>
+            <th>Modalidad</th><th>Visita Dom.</th><th>Problemática</th>
+            <th>Reinserción</th><th>Observaciones</th>
+            <th *ngIf="puedeGestionarUsuarios">Gestión</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of personas">
+            <td>{{ p.numero }}</td>
+            <td>{{ p.nombres }}</td>
+            <td>{{ p.apellidos }}</td>
+            <td>{{ p.cedula }}</td>
+            <td>{{ p.sexo }}</td>
+            <td>{{ p.fecha_ingreso | date:'dd/MM/yyyy' }}</td>
+            <td>{{ p.edad_al_ingresar }}</td>
+            <td>{{ p.fecha_nac | date:'dd/MM/yyyy' }}</td>
+            <td>{{ p.edad_actual_anios }}</td>
+            <td>{{ p.edad_actual_meses }}</td>
+            <td>{{ p.edad_actual_dias }}</td>
+            <td>{{ p.ciudad_origen }}</td>
+            <td>{{ p.direccion }}</td>
+            <td><span class="db-badge-pill">{{ p.codigo_pais }}</span></td>
+            <td>{{ p.telefono_contacto }}</td>
+            <td>{{ p.representante }}</td>
+            <td>{{ p.derivado_por }}</td>
+            <td>{{ p.modalidad }}</td>
+            <td>{{ p.fecha_visita_domiciliaria | date:'dd/MM/yyyy' }}</td>
+            <td>{{ p.tipo_problematica }}</td>
+            <td>{{ p.fecha_reinsercion_derivacion | date:'dd/MM/yyyy' }}</td>
+            <td>{{ p.observaciones }}</td>
+            <td *ngIf="puedeGestionarUsuarios">
+              <button class="db-btn-danger-sm" (click)="eliminarPersona(p.id)" type="button">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="db-tabla-oculta-msg" *ngIf="!mostrarTablaExcel">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="#94A3B8" stroke-width="1.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+        <line x1="1" y1="1" x2="23" y2="23"/>
+      </svg>
+      Tabla oculta · {{ personas.length }} registros en base de datos · Pulse "Mostrar tabla" para ver los datos
+    </div>
+  </div>
+
+  <div class="db-card db-card--form" *ngIf="puedeGestionarUsuarios">
+
+    <div class="db-card-header">
+      <div class="db-card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="#F97316" stroke-width="2" width="22" height="22">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375
+               0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11
+               a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374
+               21c-2.331 0-4.512-.645-6.374-1.766Z"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="db-card-title-text">Agregar Nueva Persona Beneficiaria</h2>
+        <p class="db-card-subtitle">Complete todos los campos obligatorios (*) para el registro.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="agregarPersona()" autocomplete="off" novalidate>
+
+      <div class="db-section-label">
+        <span class="db-section-num">1</span> Datos Principales
+      </div>
+      <div class="db-grid db-grid--7">
+        <div class="db-field">
+  <label for="numero">Nº <span class="db-auto-badge">AUTO</span></label>
+  <input id="numero" type="number" formControlName="numero" placeholder="Auto" class="db-calc" readonly/>
+</div>
+        <div class="db-field">
+          <label for="nombres">Nombres <span class="req">*</span></label>
+          <input id="nombres" type="text" formControlName="nombres"
+                 placeholder="Juan Carlos" [class.db-invalid]="isInvalid('nombres')"/>
+          <div class="db-error" *ngIf="isInvalid('nombres')">
+            <span *ngIf="form.get('nombres')?.errors?.['required']">Obligatorio.</span>
+            <span *ngIf="form.get('nombres')?.errors?.['minlength']">Mínimo 3 caracteres.</span>
+          </div>
+        </div>
+        <div class="db-field">
+          <label for="apellidos">Apellidos <span class="req">*</span></label>
+          <input id="apellidos" type="text" formControlName="apellidos"
+                 placeholder="Pérez Gómez" [class.db-invalid]="isInvalid('apellidos')"/>
+          <div class="db-error" *ngIf="isInvalid('apellidos')">
+            <span *ngIf="form.get('apellidos')?.errors?.['required']">Obligatorio.</span>
+            <span *ngIf="form.get('apellidos')?.errors?.['minlength']">Mínimo 3 caracteres.</span>
+          </div>
+        </div>
+        <div class="db-field">
+  <label for="codigo">Código <span class="db-auto-badge">AUTO</span></label>
+  <input id="codigo" type="text" formControlName="codigo" placeholder="Auto" class="db-calc" readonly/>
+</div>
+        <div class="db-field">
+          <label for="sexo">Sexo</label>
+          <select id="sexo" formControlName="sexo">
+            <option value="">Seleccionar</option>
+            <option *ngFor="let s of sexos" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+        <div class="db-field">
+          <label for="fecha_ingreso">Fecha de Ingreso</label>
+          <input id="fecha_ingreso" type="date" formControlName="fecha_ingreso"
+                 [class.db-invalid]="isInvalid('fecha_ingreso')"/>
+          <div class="db-error" *ngIf="isInvalid('fecha_ingreso')">No debe superar el año 2026.</div>
+        </div>
+        <div class="db-field">
+          <label for="edad_al_ingresar">Edad al Ingresar</label>
+          <input id="edad_al_ingresar" type="number" formControlName="edad_al_ingresar"
+                 placeholder="0" min="0"/>
+        </div>
+      </div>
+
+      <div class="db-section-label">
+        <span class="db-section-num">2</span> Nacimiento y Ubicación
+      </div>
+      <div class="db-grid db-grid--7">
+        <div class="db-field">
+          <label for="cedula">Cédula de Identidad</label>
+          <input id="cedula" type="text" formControlName="cedula" placeholder="1745839545"/>
+        </div>
+        <div class="db-field">
+          <label for="fecha_nac">Fecha de Nacimiento</label>
+          <input id="fecha_nac" type="date" formControlName="fecha_nac"
+                 [class.db-invalid]="isInvalid('fecha_nac')"/>
+          <div class="db-error" *ngIf="isInvalid('fecha_nac')">No debe superar el año 2026.</div>
+        </div>
+        <div class="db-field">
+          <label for="edad_actual_anios">Edad Años <span class="db-auto-badge">AUTO</span></label>
+          <input id="edad_actual_anios" type="number" formControlName="edad_actual_anios"
+                 placeholder="—" class="db-calc" readonly/>
+        </div>
+        <div class="db-field">
+          <label for="edad_actual_meses">Edad Meses <span class="db-auto-badge">AUTO</span></label>
+          <input id="edad_actual_meses" type="number" formControlName="edad_actual_meses"
+                 placeholder="—" class="db-calc" readonly/>
+        </div>
+        <div class="db-field">
+          <label for="edad_actual_dias">Edad Días <span class="db-auto-badge">AUTO</span></label>
+          <input id="edad_actual_dias" type="number" formControlName="edad_actual_dias"
+                 placeholder="—" class="db-calc" readonly/>
+        </div>
+        <div class="db-field">
+          <label for="ciudad_origen">Ciudad de Origen</label>
+          <input id="ciudad_origen" type="text" formControlName="ciudad_origen" placeholder="Guayaquil"/>
+        </div>
+        <div class="db-field">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" type="text" formControlName="direccion" placeholder="Calle, sector..."/>
+        </div>
+      </div>
+
+      <div class="db-section-label">
+        <span class="db-section-num">3</span> Contacto y Gestión
+      </div>
+      <div class="db-grid db-grid--7">
+        <div class="db-field">
+          <label for="codigo_pais">Código País <span class="req">*</span></label>
+          <select id="codigo_pais" formControlName="codigo_pais"
+                  [class.db-invalid]="isInvalid('codigo_pais')">
+            <option *ngFor="let p of paises" [value]="p.prefijo">
+              {{ p.nombre }} ({{ p.codigo }}) {{ p.prefijo }}
+            </option>
+          </select>
+          <div class="db-error" *ngIf="isInvalid('codigo_pais')">Obligatorio.</div>
+        </div>
+        <div class="db-field">
+          <label for="telefono_contacto">Teléfono de Contacto</label>
+          <input id="telefono_contacto" type="text" formControlName="telefono_contacto"
+                 placeholder="0999 999 999"/>
+        </div>
+        <div class="db-field">
+          <label for="representante">Representante</label>
+          <input id="representante" type="text" formControlName="representante"
+                 placeholder="Nombre del representante"/>
+        </div>
+        <div class="db-field">
+          <label for="derivado_por">Derivado Por</label>
+          <input id="derivado_por" type="text" formControlName="derivado_por"
+                 placeholder="Persona o institución que derivó"/>
+        </div>
+        <div class="db-field">
+          <label for="modalidad">Modalidad</label>
+          <input id="modalidad" type="text" formControlName="modalidad"
+                 placeholder="Presencial / Virtual"/>
+        </div>
+        <div class="db-field">
+          <label for="fecha_visita_domiciliaria">Fecha Visita Domiciliaria</label>
+          <input id="fecha_visita_domiciliaria" type="date"
+                 formControlName="fecha_visita_domiciliaria"
+                 [class.db-invalid]="isInvalid('fecha_visita_domiciliaria')"/>
+          <div class="db-error" *ngIf="isInvalid('fecha_visita_domiciliaria')">
+            No debe superar el año 2026.
+          </div>
+        </div>
+      </div>
+
+      <div class="db-section-label">
+        <span class="db-section-num">4</span> Problemática y Derivación
+      </div>
+      <div class="db-grid db-grid--2">
+        <div class="db-field">
+          <label for="tipo_problematica">Tipo de Problemática</label>
+          <input id="tipo_problematica" type="text" formControlName="tipo_problematica"
+                 placeholder="Describa la problemática"/>
+        </div>
+        <div class="db-field">
+          <label for="fecha_reinsercion_derivacion">Fecha Reinserción o Derivación</label>
+          <input id="fecha_reinsercion_derivacion" type="date"
+                 formControlName="fecha_reinsercion_derivacion"
+                 [class.db-invalid]="isInvalid('fecha_reinsercion_derivacion')"/>
+          <div class="db-error" *ngIf="isInvalid('fecha_reinsercion_derivacion')">
+            No debe superar el año 2026.
+          </div>
+        </div>
+      </div>
+
+      <div class="db-section-label">
+        <span class="db-section-num">5</span> Observaciones
+      </div>
+      <div class="db-grid db-grid--1">
+        <div class="db-field">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" formControlName="observaciones" rows="4"
+                    placeholder="Ingrese las observaciones institucionales pertinentes..."></textarea>
+        </div>
+      </div>
+
+      <div class="db-form-actions">
+        <button type="submit" class="db-btn-primary"
+                [disabled]="form.invalid || cargando">
+          <svg *ngIf="!cargando" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <svg *ngIf="cargando" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spin">
+            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+          </svg>
+          <span>{{ cargando ? 'Guardando...' : 'Agregar Persona' }}</span>
+        </button>
+        <span class="db-req-note"><span class="req">*</span> Campos obligatorios</span>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="db-empty" *ngIf="personas.length === 0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+         fill="none" stroke="#CBD5E1" stroke-width="1.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <p>No hay personas registradas aún.</p>
+  </div>
+
+</div>
+
+<div class="db-modal-overlay" *ngIf="modalAbierto" (click)="cerrarModal()">
+  <div class="db-modal" (click)="$event.stopPropagation()">
+    <div class="db-modal-header">
+      <div class="db-modal-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+             fill="none" stroke="#F97316" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="10" y1="15" x2="10" y2="9"/>
+          <line x1="14" y1="15" x2="14" y2="9"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="db-modal-title">Suspender Usuario</h3> <p class="db-modal-subtitle">
+          {{ usuarioSeleccionado?.nombreCompleto || usuarioSeleccionado?.email }}
+        </p>
+      </div>
+      <button class="db-modal-close" (click)="cerrarModal()" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="db-modal-body">
+      <p class="db-modal-pregunta">Selecciona la duración de la suspensión:</p>
+      <div class="db-duracion-grid">
+        <button
+          *ngFor="let op of opcionesDuracion"
+          type="button"
+          class="db-duracion-btn"
+          [class.db-duracion-btn--selected]="duracionSeleccionada === op.valor"
+          [class.db-duracion-btn--permanente]="op.valor === 'permanente'"
+          (click)="duracionSeleccionada = op.valor">
+          <span class="db-duracion-label">{{ op.etiqueta }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="db-modal-footer">
+      <button class="db-btn-outline-modal" (click)="cerrarModal()" type="button">
+        Cancelar
+      </button>
+      <button
+        class="db-btn-warning-modal"
+        (click)="confirmarSuspension()"
+        [disabled]="!duracionSeleccionada"
+        type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="10" y1="15" x2="10" y2="9"/>
+          <line x1="14" y1="15" x2="14" y2="9"/>
+        </svg>
+        Confirmar Suspensión
+      </button>
+    </div>
+  </div>
+</div>
